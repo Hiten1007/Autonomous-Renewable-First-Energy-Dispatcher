@@ -1,0 +1,23 @@
+DOCUMENT ID: SOP-01
+TITLE: Standard Operating Procedure for Power Source Management
+VERSION: 1.2
+DATE: 2023-10-27
+---------------------------------------------------------------------
+
+1.  **Primary Goal:** To minimize the carbon footprint of the society's energy consumption while ensuring cost-effectiveness and grid stability.
+
+2.  **Source Priority Hierarchy:** The default operational priority for power sources is as follows:
+    2.1. **Priority 1: On-site Solar Generation.** If solar generation (`solar_kw`) is greater than the current total load (`load_kw`), the system must operate exclusively on solar power.
+    2.2. **Priority 2: Stored Battery Power.** Utilize battery power when conditions in Section 3 are met.
+    2.3. **Priority 3: National Grid.** Use grid power only when solar and battery are insufficient or when grid conditions are exceptionally favorable (see Section 4).
+
+3.  **Battery Discharge Protocol:**
+    3.1. **Carbon-based Discharge:** Initiate battery discharge if `solar_kw` is less than `load_kw` AND the grid carbon intensity (`grid_carbon_intensity`) is above 400 gCO2eq/kWh. The goal is to avoid drawing from a "dirty" grid.
+    3.2. **Peak Shaving / Cost Avoidance:** Initiate battery discharge during designated peak tariff hours (17:00 - 20:00) if the battery state of charge (`battery_soc`) is above 60% (0.60), regardless of carbon intensity, to reduce costs.
+    3.3. **Discharge Cut-off:** Cease battery discharge and switch to the grid if `battery_soc` falls below 20% (0.20), unless in an emergency state (see EMG-01). This 20% buffer is reserved for critical situations.
+
+4.  **Grid Import Protocol:**
+    4.1. **Standard Use:** It is permissible to draw power from the grid when `solar_kw` is less than `load_kw` and battery discharge conditions (Section 3) are not met.
+    4.2. **Opportunistic Charging (Green Grid):** If `grid_carbon_intensity` is below 150 gCO2eq/kWh AND `battery_soc` is below 80% (0.80), the system is authorized to draw power from the grid to charge the battery, even if solar power is sufficient to cover the load. This is known as "green charging".
+
+5.  **Grid Export Prohibition:** Under no circumstances is this microgrid authorized to export power back to the national grid. If `solar_kw` significantly exceeds `load_kw` and the battery is fully charged (`battery_soc` > 98%), solar generation must be curtailed to match the load.

@@ -1,0 +1,16 @@
+DOCUMENT ID: EMG-01
+TITLE: Emergency Protocols for Critical Scenarios
+VERSION: 1.1
+DATE: 2023-10-27
+---------------------------------------------------------------------
+
+1.  **Preamble:** These protocols override all standard operating procedures (SOP-01, SOP-02) in the event of a critical system threat. Human oversight is advised when these protocols are triggered.
+
+2.  **Protocol Blackout Imminent (Code Red):**
+    2.1. **Trigger Condition:** This protocol is activated if the national grid is down (assumed if `grid_carbon_intensity` is reported as -1 or unavailable) AND on-site generation (`solar_kw`) is less than the total load (`load_kw`) AND battery state of charge (`battery_soc`) is below 20% (0.20).
+    2.2. **Mandatory Action:** Immediately shed all Tier 2 (Non-Essential) loads. The primary objective is to prolong power availability for Tier 1 (Essential) loads for as long as possible.
+    2.3. **System State:** The system must operate in "Essential Only" mode until the national grid is restored or on-site generation recovers.
+
+3.  **Protocol Extreme Carbon Alert (Code Purple):**
+    3.1. **Trigger Condition:** This protocol is activated if the grid carbon intensity (`grid_carbon_intensity`) exceeds 750 gCO2eq/kWh. This indicates an extremely unstable or fossil-fuel-heavy national grid.
+    3.2. **Mandatory Action:** Immediately disconnect from the national grid. The system must operate in an "islanded" mode, relying solely on solar and battery. Shed Tier 2 loads if necessary to maintain stability in this mode. The 20% battery reserve rule from SOP-01 is waived; the battery can be discharged down to a critical minimum of 5% (0.05) to avoid using the extremely dirty grid.

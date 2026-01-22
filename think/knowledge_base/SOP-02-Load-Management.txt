@@ -1,0 +1,20 @@
+DOCUMENT ID: SOP-02
+TITLE: Standard Operating Procedure for Load Management
+VERSION: 1.0
+DATE: 2023-10-27
+---------------------------------------------------------------------
+
+1.  **Objective:** To maintain grid stability by managing non-essential loads during periods of high demand or low generation.
+
+2.  **Load Tiers:** The society's electrical loads are categorized into two tiers:
+    2.1. **Tier 1 (Essential Loads):** Residential lighting, refrigerators, medical equipment, core network infrastructure, and water pumps. These loads MUST NOT be shed under normal operating conditions.
+    2.2. **Tier 2 (Non-Essential Loads):** Electric vehicle (EV) charging stations, swimming pool heaters/pumps, decorative lighting, and central air conditioning units (when ambient temperature is below 26°C).
+
+3.  **Load Shedding Trigger Conditions:**
+    3.1. **Generation Deficit:** Initiate shedding of Tier 2 loads if the total load (`load_kw`) exceeds the sum of available solar (`solar_kw`) and available battery power. This is a primary stability measure.
+    3.2. **Imminent Battery Depletion:** Initiate shedding of Tier 2 loads if the battery is the primary source of power AND its state of charge (`battery_soc`) drops below 25% (0.25). This action preserves the remaining energy for Tier 1 essential loads.
+
+4.  **Load Restoration Protocol:**
+    4.1. Non-essential loads may be restored once the system has been stable for a minimum of 15 minutes and one of the following conditions is met:
+        4.1.1. On-site solar generation (`solar_kw`) exceeds the total load (`load_kw`).
+        4.1.2. The battery state of charge (`battery_soc`) has recovered to above 40% (0.40).
