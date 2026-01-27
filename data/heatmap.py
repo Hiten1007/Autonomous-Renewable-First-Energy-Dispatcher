@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df = pd.read_csv("./HackVeda/load_meter_ready_dataset.csv")
+df = pd.read_csv("./solar_energy/HOURLY_SOLAR_DATA_PREPROCESSED.csv")
 
 # Compute correlation
 corr = df.corr()

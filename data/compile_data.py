@@ -4,49 +4,84 @@ import numpy as np
 from scipy.spatial import cKDTree
 from functools import reduce
 
+# =============================
+# CONFIG
+# =============================
 BASE_DIR = os.getcwd()
 K_NEIGHBORS = 4
 
-# ---------- STEP 1: LOAD ALL FEATURES ----------
-feature_data = {}  # feature_name -> dataframe
+# 🔒 EXPLICIT FEATURE FOLDER LIST (YOU CONTROL THIS)
+FEATURE_FOLDERS = [
+    "All Sky Surface Shortwave Downward Irradiance",
+    "CI",
+    "TEMP",
+    "WIND SPEED"
+]
 
-for feature_folder in os.listdir(BASE_DIR):
-    folder_path = os.path.join(BASE_DIR, feature_folder)
+KEY_COLS = ["LAT", "LON", "YEAR", "MO", "DY"]
+
+# =============================
+# STEP 1: LOAD FEATURES SAFELY
+# =============================
+feature_data = {}   # feature_name -> dataframe
+
+for folder in FEATURE_FOLDERS:
+    folder_path = os.path.join(BASE_DIR, folder)
 
     if not os.path.isdir(folder_path):
-        continue
+        raise FileNotFoundError(f"❌ Missing folder: {folder}")
 
     dfs = []
     for file in sorted(os.listdir(folder_path)):
         if file.endswith(".csv"):
             df = pd.read_csv(
                 os.path.join(folder_path, file),
-                header=9   # 0-based index → line 10
+                header=9
             )
             dfs.append(df)
 
-    if dfs:
-        full_df = pd.concat(dfs, ignore_index=True)
+    if not dfs:
+        raise ValueError(f"❌ No CSV files found in {folder}")
 
-        # safer feature column extraction
-        feature_col = [c for c in full_df.columns if c not in ["LAT", "LON", "YEAR", "MO", "DY"]][0]
+    full_df = pd.concat(dfs, ignore_index=True)
 
-        feature_data[feature_col] = full_df
+    # Identify feature column safely
+    feature_cols = [c for c in full_df.columns if c not in KEY_COLS]
 
-print(f"📦 Loaded {len(feature_data)} features")
+    if len(feature_cols) != 1:
+        raise ValueError(
+            f"❌ Folder '{folder}' has ambiguous feature columns: {feature_cols}"
+        )
 
-# ---------- STEP 2: BUILD MASTER SPATIO-TEMPORAL GRID ----------
-master_grid = pd.concat(
-    [
-        df[["LAT", "LON", "YEAR", "MO", "DY"]]
-        for df in feature_data.values()
-    ],
-    ignore_index=True
-).drop_duplicates()
+    feature_col = feature_cols[0]
 
-print(f"🌍 Master grid size: {len(master_grid)} rows")
+    if feature_col in feature_data:
+        raise ValueError(f"❌ Duplicate feature detected: {feature_col}")
 
-# ---------- STEP 3: SPATIAL FILL PER FEATURE ----------
+    feature_data[feature_col] = full_df
+
+    print(f"✅ Loaded feature: {feature_col} ({len(full_df)} rows)")
+
+print(f"\n📦 Total features loaded: {len(feature_data)}")
+
+# =============================
+# STEP 2: MASTER GRID
+# =============================
+master_grid = (
+    pd.concat(
+        [df[KEY_COLS] for df in feature_data.values()],
+        ignore_index=True
+    )
+    .drop_duplicates()
+    .sort_values(KEY_COLS)
+    .reset_index(drop=True)
+)
+
+print(f"🌍 Master grid size: {len(master_grid)}")
+
+# =============================
+# STEP 3: SPATIAL FILL FUNCTION
+# =============================
 def spatial_fill_feature(feature_df, feature_col, master_grid):
     filled_days = []
 
@@ -59,14 +94,13 @@ def spatial_fill_feature(feature_df, feature_col, master_grid):
 
         merged = day_grid.merge(
             day_data,
-            on=["LAT", "LON", "YEAR", "MO", "DY"],
+            on=KEY_COLS,
             how="left"
         )
 
         known = merged.dropna(subset=[feature_col])
         missing = merged[merged[feature_col].isna()]
 
-        # Only spatial interpolation if some data exists that day
         if not known.empty and not missing.empty:
             tree = cKDTree(known[["LAT", "LON"]].values)
             k = min(K_NEIGHBORS, len(known))
@@ -76,14 +110,11 @@ def spatial_fill_feature(feature_df, feature_col, master_grid):
                 k=k
             )
 
-            # fix for k=1 case
             if k == 1:
                 distances = distances[:, None]
                 indices = indices[:, None]
 
             distances = np.maximum(distances, 1e-6)
-
-            # SAFE indexing using numpy
             known_values = known[feature_col].to_numpy()
             values = known_values[indices]
 
@@ -96,29 +127,36 @@ def spatial_fill_feature(feature_df, feature_col, master_grid):
 
     return pd.concat(filled_days, ignore_index=True)
 
+# =============================
+# STEP 4: FILL EACH FEATURE
+# =============================
 filled_features = []
 
 for feature_col, df in feature_data.items():
-    print(f"🔧 Filling feature: {feature_col}")
+    print(f"🔧 Spatial filling: {feature_col}")
     filled_df = spatial_fill_feature(df, feature_col, master_grid)
 
-    # keep only needed columns
-    filled_df = filled_df[["LAT", "LON", "YEAR", "MO", "DY", feature_col]]
+    filled_df = filled_df[KEY_COLS + [feature_col]]
     filled_features.append(filled_df)
 
-# ---------- STEP 4: MERGE ALL FEATURES ----------
+# =============================
+# STEP 5: SAFE MERGE (INNER ON GRID)
+# =============================
 final_df = reduce(
     lambda left, right: left.merge(
         right,
-        on=["LAT", "LON", "YEAR", "MO", "DY"],
-        how="inner"
+        on=KEY_COLS,
+        how="inner",
+        validate="one_to_one"
     ),
     filled_features
 )
 
-# ---------- STEP 5: SAVE ----------
+# =============================
+# STEP 6: SAVE
+# =============================
 final_df.to_csv("FINAL_ALL_FEATURES.csv", index=False)
 
-print("🎉 DONE")
+print("\n🎉 PIPELINE COMPLETE")
 print(f"📁 Output: FINAL_ALL_FEATURES.csv")
 print(f"📊 Shape: {final_df.shape}")
