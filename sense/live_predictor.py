@@ -127,7 +127,7 @@ if __name__ == "__main__":
     weather_hist = fetch_live_weather_history()
     solar_hist = estimate_solar(weather_hist)
 
-    now = (datetime.now() - timedelta(days=10)).replace(
+    now = (datetime.now() - timedelta(days=-1)).replace(
         hour=15, minute=0, second=0, microsecond=0
     )
     X = create_feature_vector(now, solar_hist, weather_hist)
