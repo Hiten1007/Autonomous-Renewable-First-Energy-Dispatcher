@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "trigger_timestamp": "2026-01-28T15:30:00",
+    "region": "IN-NO"
+  },
+
+  "current_state": {
+    "resolution": "30min",
+    "actual_solar_mwh": 0.0,
+    "actual_load_mwh": 1164.45,
+    "battery": {
+      "energy_mwh": 5.2,
+      "capacity_mwh": 10.0,
+      "soc_percent": 52.0
+    }
+  },
+
+  "grid_metrics": {
+    "carbon_intensity_direct_gco2_per_kwh": 648,
+    "carbon_intensity_lifecycle_gco2_per_kwh" : 500,
+    "renewable_percentage": 19,
+    "carbon_free_percentage": 14
+  },
+
+  "forecast_context": {
+    "resolution": "hourly",
+    "note": "All forecast values represent total energy over one full hour. The control step is 30 minutes. Forecasts are provided for planning context only.",
+    "horizon_hours": 6,
+    "data": [
+      {
+        "t_plus_hours": 1,
+        "forecast_solar_mwh": 6793.21,
+        "forecast_load_mwh": 4404.53,
+        "net_demand_mwh": -2388.68
+      },
+      {
+        "t_plus_hours": 2,
+        "forecast_solar_mwh": 5616.16,
+        "forecast_load_mwh": 5073.83,
+        "net_demand_mwh": -542.33
+      },
+      {
+        "t_plus_hours": 3,
+        "forecast_solar_mwh": 4104.43,
+        "forecast_load_mwh": 5610.26,
+        "net_demand_mwh": 1505.83
+      },
+      {
+        "t_plus_hours": 4,
+        "forecast_solar_mwh": 5749.95,
+        "forecast_load_mwh": 5988.74,
+        "net_demand_mwh": 238.79
+      },
+      {
+        "t_plus_hours": 5,
+        "forecast_solar_mwh": 0.0,
+        "forecast_load_mwh": 6208.29,
+        "net_demand_mwh": 6208.29
+      },
+      {
+        "t_plus_hours": 6,
+        "forecast_solar_mwh": 0.0,
+        "forecast_load_mwh": 6039.69,
+        "net_demand_mwh": 6039.69
+      }
+    ]
+  }
+}

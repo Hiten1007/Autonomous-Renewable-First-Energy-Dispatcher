@@ -3,12 +3,16 @@ import numpy as np
 import joblib
 from datetime import datetime, timedelta
 
-MODEL_PATH = "fixed_load_meter_model.pkl"
-DATA_PATH = "haryana_hourly_generation_preprocessed.csv"
+# ---------------- CONFIG ----------------
+LOAD_MODEL_PATH = "fixed_load_meter_model.pkl"
+LOAD_DATA_PATH = "haryana_hourly_generation_preprocessed.csv"
 
+# Load model once globally
+LOAD_MODEL = joblib.load(LOAD_MODEL_PATH)
 
-def create_features(ts: pd.Timestamp, load_now: float, load_lag_1h: float,
-                    load_lag_24h: float, load_lag_168h: float):
+def create_load_features(ts: pd.Timestamp, load_now: float, load_lag_1h: float,
+                         load_lag_24h: float, load_lag_168h: float):
+    """Creates the feature vector for the multi-output load model."""
     hour = ts.hour
     weekday = ts.weekday()
     month = ts.month
@@ -17,7 +21,7 @@ def create_features(ts: pd.Timestamp, load_now: float, load_lag_1h: float,
     hour_cos = np.cos(2 * np.pi * hour / 24)
     dow_sin = np.sin(2 * np.pi * weekday / 7)
     dow_cos = np.cos(2 * np.pi * weekday / 7)
-    is_weekend = weekday >= 5
+    is_weekend = 1 if weekday >= 5 else 0
 
     return pd.DataFrame([{
         "hour_sin": hour_sin,
@@ -33,70 +37,92 @@ def create_features(ts: pd.Timestamp, load_now: float, load_lag_1h: float,
         "load_lag_168h": load_lag_168h
     }])
 
-
 def get_nearest_past_load(df, ts):
     """
-    Return nearest past load values for given timestamp.
+    Finds the historical load values based on the trigger timestamp.
     """
-    df = df.sort_values(["Year", "Month", "Day", "Hour_of_day"]).reset_index(drop=True)
-
-    # Convert dataset to datetime
-    df["timestamp"] = pd.to_datetime(df["Year"].astype(str) + "-" +
-                                     df["Month"].astype(str).str.zfill(2) + "-" +
-                                     df["Day"].astype(str).str.zfill(2) + " " +
-                                     df["Hour_of_day"].astype(str).str.zfill(2) + ":00:00")
-
     # Filter past records
     past_df = df[df["timestamp"] <= ts]
 
     if past_df.empty:
-        raise ValueError("No past data available for this timestamp.")
+        # Fallback if the requested timestamp is earlier than our CSV data
+        return 0.0, 0.0, 0.0, 0.0
 
     # Find nearest past timestamp index
     nearest_idx = past_df.index[-1]
 
     load_now = float(df.loc[nearest_idx, "Demand_MWh"])
 
-    # Lags
-    lag1 = float(df.loc[nearest_idx - 1, "Demand_MWh"]) if nearest_idx >= 1 else np.nan
-    lag24 = float(df.loc[nearest_idx - 24, "Demand_MWh"]) if nearest_idx >= 24 else np.nan
-    lag168 = float(df.loc[nearest_idx - 168, "Demand_MWh"]) if nearest_idx >= 168 else np.nan
+    # Safely get lags using positional indexing
+    def get_val(idx_offset):
+        target_idx = nearest_idx - idx_offset
+        if target_idx >= 0:
+            return float(df.loc[target_idx, "Demand_MWh"])
+        return load_now # Fallback to current load if lag doesn't exist
+
+    lag1 = get_val(1)
+    lag24 = get_val(24)
+    lag168 = get_val(168)
 
     return load_now, lag1, lag24, lag168
 
+# -------- NEW ORCHESTRATOR COMPATIBLE FUNCTION --------
+def get_load_forecast(trigger_time, hours=6):
+    """
+    Produces a dictionary where keys are 1 to 'hours' and values are MWh.
+    Compatible with: load_fc = get_load_forecast(trigger_time, hours=6)
+    """
+    # Convert trigger_time to pandas Timestamp if it's a datetime object
+    ts = pd.to_datetime(trigger_time)
 
-def forecast(timestamp_str: str):
-    ts = pd.to_datetime(timestamp_str)
+    # Load and preprocess data
+    df = pd.read_csv(LOAD_DATA_PATH)
+    
+    # Pre-construct timestamps for faster lookup
+    df["timestamp"] = pd.to_datetime(df["Year"].astype(str) + "-" +
+                                     df["Month"].astype(str).str.zfill(2) + "-" +
+                                     df["Day"].astype(str).str.zfill(2) + " " +
+                                     df["Hour_of_day"].astype(str).str.zfill(2) + ":00:00")
+    df = df.sort_values("timestamp").reset_index(drop=True)
 
-    # Load data
-    df = pd.read_csv(DATA_PATH)
-
+    # Get historical features based on trigger time
     load_now, lag1, lag24, lag168 = get_nearest_past_load(df, ts)
 
-    X = create_features(ts, load_now, lag1, lag24, lag168)
+    # Create input vector
+    X = create_load_features(ts, load_now, lag1, lag24, lag168)
 
-    model = joblib.load(MODEL_PATH)
+    # Predict (assumes multi-output model returning array of size 'hours')
+    y_pred = LOAD_MODEL.predict(X)[0]
 
-    y_pred = model.predict(X)[0]
+    # Format into a 1-indexed dictionary
+    forecast_dict = {}
+    for i in range(hours):
+        # The model predicts i+1 hours ahead
+        val = float(y_pred[i])
+        forecast_dict[i + 1] = round(max(0, val), 2)
 
-    result = []
-    for i in range(6):
-        result.append({
-            "Hour Ahead": f"{i + 1}h",
-            "Timestamp": (ts + timedelta(hours=i + 1)).strftime("%Y-%m-%d %H:%M:%S"),
-            "Forecast (MWh)": round(float(y_pred[i]), 2)
-        })
+    return forecast_dict
 
-    return pd.DataFrame(result)
-
-
+# ---------------- TESTING -------------------
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ts", type=str, required=True,
-                        help="Timestamp in format YYYY-MM-DD HH (or any pandas parseable format)")
-    args = parser.parse_args()
-
-    df_forecast = forecast(args.ts)
-    print(df_forecast.to_string(index=False))
+    # Example trigger time
+    trigger_time = datetime(2026, 2, 18, 15, 0) # Replace with a valid date from your CSV
+    
+    FORECAST_HORIZON = 6
+    
+    # Calling it like the orchestrator
+    load_fc = get_load_forecast(trigger_time, hours=FORECAST_HORIZON)
+    
+    print(f"Trigger Time: {trigger_time}")
+    print("Load Forecast Array:", load_fc)
+    
+    # Example of how it fits into your main orchestrator loop:
+    forecast_data = []
+    for h in range(1, FORECAST_HORIZON + 1):
+        load = load_fc[h]
+        forecast_data.append({
+            "t_plus_hours": h,
+            "forecast_load_mwh": load
+        })
+    print("\nFormatted for Orchestrator:")
+    print(forecast_data)
