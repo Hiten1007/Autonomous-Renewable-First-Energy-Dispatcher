@@ -3,7 +3,7 @@ from datetime import datetime
 
 # ---- IMPORT DATA SOURCES ----
 from real_values import get_current_actuals
-from battery_state import get_battery_state
+from get_battery_state import get_battery_state
 from grid_carbon_info import get_grid_metrics
 from load_predictor import get_load_forecast
 from live_predictor import get_solar_forecast

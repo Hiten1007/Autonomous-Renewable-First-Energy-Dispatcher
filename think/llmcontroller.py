@@ -1,25 +1,31 @@
-from langchain.prompts import PromptTemplate
-from langchain import hub
-from langchain.agents import create_react_agent, AgentExecutor
-from pydantic_classes import PhysicsSlice, CarbonSlice, EnergyServiceInput, ToolInput
+
+from langchain_core.prompts import PromptTemplate
+from langchain_core.tools import StructuredTool  # Moved to core for stability
+import langchainhub as hub
+
+
+import langchainhub
+from langchain_classic.agents import create_react_agent
+from langchain_classic.agents import AgentExecutor
+
+# --- AWS Specialized Package (The fix for your ImportError) ---
+# This replaces the langchain_community version which was causing the error
+from langchain_aws.retrievers import AmazonKnowledgeBasesRetriever
+
+from think.pydantic_classes import PhysicsSlice, CarbonSlice, EnergyServiceInput, ToolInput
 from think.services.svc_max_renewable import execute_max_renewable
 from think.services.svc_peak_shaving import execute_peak_shaving
 from think.services.svc_low_carbon_grid import execute_low_carbon_grid
 from think.services.svc_safe_throttle import execute_safe_throttle
 from think.brain.agent_prompts import AGENT_SYSTEM_PROMPT
-from langchain.tools import StructuredTool
 from think.brain.llm import llm
 import json
 import traceback
 
 
-import boto3
-from langchain_community.retrievers import AmazonBedrockKnowledgeBaseRetriever
-from langchain.tools import StructuredTool
-
 # 1. Setup the Bedrock KB Retriever
 # Use the Knowledge Base ID from your screenshot
-RETRIEVER = AmazonBedrockKnowledgeBaseRetriever(
+RETRIEVER = AmazonKnowledgeBasesRetriever(
     knowledge_base_id="YX0BXMRB7Z",
     retrieval_config={
         "vectorSearchConfiguration": {
@@ -137,40 +143,48 @@ safety_tool = StructuredTool.from_function(
 )
 
 def get_mcp_agent():
-    """Initializes the agent with Pinned Telemetry Persistence."""
+    agent_tools = [
+        safety_tool, 
+        max_renewable_tool, 
+        peak_shaving_tool, 
+        low_carbon_tool, 
+        safe_throttle_tool
+    ]
+
+    # Use ONLY your system instructions as string - no template needed
+
+    react_template = """Answer the following questions as best you can. You have access to the following tools:
+
+{tools}
+
+Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+Begin!
+
+Question: {input}
+{agent_scratchpad}"""
     
-    # 1. Your defined tools (SVCs and RAG)
-    tools = [safety_tool, max_renewable_tool, peak_shaving_tool, low_carbon_tool, safe_throttle_tool]
-
-    # 2. Pull the base ReAct prompt
-    base_prompt = hub.pull("hwchase17/react-chat")
-
-    # 3. Create a Custom Template that pins the Telemetry at the top
-    # This ensures the LLM sees the data BEFORE it starts its "Thought" loop
-    persistent_template = f"""
-{AGENT_SYSTEM_PROMPT}
-
---- GLOBAL CURRENT TELEMETRY ---
-{{telemetry_data}}
---- END GLOBAL CONTEXT ---
-
-{base_prompt.template}
-"""
+    prompt = PromptTemplate.from_template(react_template)
     
-    prompt = PromptTemplate.from_template(template=persistent_template)
-
-    # 4. Create the Agent
-    agent = create_react_agent(llm, tools, prompt)
-
-    agent_executor = AgentExecutor(
-        agent=agent,
-        tools=tools,
-        verbose=True,
-        handle_parsing_errors=True,
-        # IMPORTANT: Max iterations ensures it doesn't loop infinitely 
-        # but has enough "memory" to finish the task
-        max_iterations=5 
+    # Add your system prompt at top
+    full_prompt = PromptTemplate(
+        template=f"{AGENT_SYSTEM_PROMPT}\n\n{react_template}",
+        input_variables=["input", "agent_scratchpad", "tools", "tool_names"]
     )
+    
+    agent = create_react_agent(llm, agent_tools, full_prompt)
+    agent_executor = AgentExecutor(agent=agent, tools=agent_tools, verbose=True)
+    
+    
     return agent_executor
 
 mcp_agent_executor = get_mcp_agent()

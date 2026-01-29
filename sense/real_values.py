@@ -1,20 +1,14 @@
 import numpy as np
-import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # ---------------- CONFIG ----------------
-START_DATE = "2026-05-02"
-DAYS = 7                      # simulate 7 days
-INTERVAL_MIN = 30
-
-SOLAR_MAX_MWH = 9000           # region-scale
+SOLAR_MAX_MWH = 9000
 LOAD_BASE_MIN = 500
 LOAD_BASE_MAX = 6000
-NOISE_STD = 0.05               # 5% noise
+NOISE_STD = 0.05
 # ---------------------------------------
 
 def seasonal_factor(month):
-    # Higher solar in summer, lower in winter
     return {
         1: 0.6, 2: 0.65, 3: 0.75,
         4: 0.9, 5: 1.0, 6: 1.05,
@@ -26,7 +20,6 @@ def solar_generation(hour, month):
     if hour < 6 or hour > 18:
         return 0.0
 
-    # Normalized bell curve (sun path)
     x = (hour - 6) / 12
     base = np.sin(np.pi * x)
 
@@ -36,7 +29,6 @@ def solar_generation(hour, month):
     return max(0, solar)
 
 def load_generation(hour, month):
-    # Daily load pattern
     if 6 <= hour <= 9:
         factor = 1.2
     elif 18 <= hour <= 22:
@@ -52,28 +44,17 @@ def load_generation(hour, month):
 
     return max(LOAD_BASE_MIN, load)
 
-# ---------------- GENERATION ----------------
-rows = []
-current = datetime.fromisoformat(START_DATE)
-end_time = current + timedelta(days=DAYS)
+# ---------------- ACTUALS SIMULATOR ----------------
 
-while current < end_time:
-    hour = current.hour + current.minute / 60
-    month = current.month
+def get_current_actuals(trigger_time: datetime):
+    hour = trigger_time.hour + trigger_time.minute / 60
+    month = trigger_time.month
 
-    solar = solar_generation(hour, month) / 2   # 30-min energy
-    load = load_generation(hour, month) / 2
+    # 30-min energy
+    solar_30min = solar_generation(hour, month) / 2
+    load_30min = load_generation(hour, month) / 2
 
-    rows.append({
-        "timestamp": current,
-        "solar_MWh_30min": round(solar, 2),
-        "load_MWh_30min": round(load, 2)
-    })
-
-    current += timedelta(minutes=INTERVAL_MIN)
-
-df = pd.DataFrame(rows)
-df.to_csv("simulated_30min_solar_load.csv", index=False)
-
-print("Generated:", len(df), "rows")
-print(df.head())
+    return {
+        "solar_mwh": round(solar_30min, 2),
+        "load_mwh": round(load_30min, 2),
+    }

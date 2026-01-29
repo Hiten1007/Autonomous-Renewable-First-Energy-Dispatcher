@@ -52,11 +52,11 @@ No extra keys are allowed.
 
 Contextual identifiers (no decisions here)
 
-"meta": {
+"meta": {{
   "timestamp": "ISO-8601 string with timezone",
   "region": "string (grid region code)",
   "window_minutes": 30
-}
+}}
 
 
 Constraints
@@ -69,12 +69,12 @@ window_minutes is fixed (e.g. 30)
 
 What happened to locally generated solar energy
 
-"solar": {
+"solar": {{
   "generated_mwh": float >= 0,
   "used_directly_mwh": float >= 0,
   "stored_mwh": float >= 0,
   "curtailed_mwh": float >= 0
-}
+}}
 
 
 Rules
@@ -89,12 +89,12 @@ Solar can never exceed physical forecast
 
 Battery state transition and energy flow
 
-"battery": {
+"battery": {{
   "state": "CHARGE | DISCHARGE | IDLE | STANDBY",
   "soc_before_mwh": float >= 0,
   "soc_after_mwh": float >= 0,
   "delta_mwh": float
-}
+}}
 
 
 Rules
@@ -115,11 +115,11 @@ soc_after_mwh must stay within battery capacity
 
 Where electricity came from (accounting only)
 
-"supply_mix": {
+"supply_mix": {{
   "local_renewables_mwh": float >= 0,
   "grid_import_mwh": float >= 0,
   "effective_re_percent": float (0–100)
-}
+}}
 
 
 Rules
@@ -134,12 +134,12 @@ effective_re_percent must reflect:
 
 Carbon impact (this is the core objective)
 
-"carbon": {
+"carbon": {{
   "grid_intensity_gco2_per_kwh": float > 0,
   "baseline_kgco2": float >= 0,
   "actual_kgco2": float >= 0,
   "saved_kgco2": float
-}
+}}
 
 
 Rules
@@ -156,10 +156,10 @@ Can be negative if strategy was worse
 
 Explainability layer (short, factual)
 
-"reasoning": {
+"reasoning": {{
   "why": "1–2 sentences referencing forecast, grid carbon data, or SOC",
   "result": "Percentage improvement or 'Neutral' or 'Worse'"
-}
+}}
 
 
 Rules
