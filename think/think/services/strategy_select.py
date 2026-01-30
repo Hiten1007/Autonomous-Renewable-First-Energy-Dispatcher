@@ -27,26 +27,28 @@ def extract_strategy_from_output(agent_output: str):
         return None
 
 def run_deterministic_math(strategy_name: str, telemetry: dict):
-    """
-    Performs the 30-min window energy balance calculations.
-    """
-    # 1. Fallback to SAFE_THROTTLE if agent hallucinates
     service_func = STRATEGY_MAP.get(strategy_name, execute_safe_throttle)
     
-    # 2. Slice the data as per previous requirements
     state = telemetry['current_state']
+    batt = state['battery']
+    
     if strategy_name in ["SVC_PEAK_SHAVING", "SVC_LOW_CARBON_GRID"]:
         data = CarbonSlice(
-            solar=state['actual_solar_mwh'], load=state['actual_load_mwh'], 
-            battery_energy=state['battery']['energy_mwh'], 
-            battery_capacity=state['battery']['capacity_mwh'], soc=state['battery']['soc_percent'],
+            solar=state['actual_solar_mwh'], 
+            load=state['actual_load_mwh'], 
+            battery_energy=batt['energy_mwh'], 
+            battery_capacity=batt['capacity_mwh'], 
+            soc=batt['soc_percent'],
             grid_intensity=telemetry['grid_metrics']['carbon_intensity_direct_gco2_per_kwh']
         )
     else:
         data = PhysicsSlice(
-            solar=state['actual_solar_mwh'], load=state['actual_load_mwh'], 
-            battery_energy=state['battery']['energy_mwh'], 
-            battery_capacity=state['battery']['capacity_mwh'], soc=state['battery']['soc_percent']
+            solar=state['actual_solar_mwh'], 
+            load=state['actual_load_mwh'], 
+            battery_energy=batt['energy_mwh'], 
+            battery_capacity=batt['capacity_mwh'], 
+            soc=batt['soc_percent']
         )
         
     return service_func(data)
+

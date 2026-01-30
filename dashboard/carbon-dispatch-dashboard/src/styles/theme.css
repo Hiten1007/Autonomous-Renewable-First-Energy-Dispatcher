@@ -1,0 +1,17 @@
+:root {
+  --bg-main: #F3F1E7;
+  --bg-surface: #E7E3D4;
+  --bg-card: #DAD6C6;
+
+  --text-primary: #2F3A2E;
+  --text-secondary: #5E6B5B;
+  --text-muted: #8A9485;
+
+  --green-main: #4F6F52;
+  --olive-soft: #7C9A6D;
+  --cta: #3E5F44;
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --shadow-soft: 0 18px 40px rgba(47,58,46,0.08);
+}

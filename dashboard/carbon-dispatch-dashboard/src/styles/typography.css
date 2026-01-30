@@ -1,0 +1,12 @@
+h1, h2, h3 {
+  font-family: "Fraunces", serif;
+  letter-spacing: 0.2px;
+}
+
+body {
+  font-family: "Work Sans", sans-serif;
+}
+
+.mono {
+  font-family: "IBM Plex Mono", monospace;
+}
