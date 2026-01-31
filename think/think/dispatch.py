@@ -2,124 +2,123 @@ from fastapi import APIRouter
 from llmcontroller import run_mcp_agent_flow
 from think.sense.data_orchestrator import build_llm_context
 from datetime import datetime
-from think.pydantic_classes import PhysicsSlice, CarbonSlice
-from think.services.svc_safe_throttle import execute_safe_throttle
-from think.services.strategy_select import  run_deterministic_math, extract_strategy_from_output
+from think.services.strategy_select import run_deterministic_math, extract_strategy_from_output
 from think.helpers.update_state import update_battery_state_local_json as update_state
+import threading
+import json
+import time
+from pathlib import Path
+from think.services.svc_safe_throttle import execute_safe_throttle
+from types import SimpleNamespace
 
 router = APIRouter(prefix="/dispatch", tags=["dispatch"])
 
-import threading
-import time
+# Path to your local JSON
+LOCAL_JSON = Path("dispatch_data.json")
 
+# Global thread state
 _dispatch_thread = None
 _dispatch_running = False
 
+
 def dispatch_loop():
     global _dispatch_running
-
     _dispatch_running = True
 
     while _dispatch_running:
         try:
-            print("📡 Running data orchestrator")
             now = datetime.now()
-
-            # 1. Pass time to the orchestrator to get fresh telemetry
             telemetry_data = build_llm_context(now)
 
-            print("🧠 Running MCP agent")
             agent_raw_output = run_mcp_agent_flow(telemetry_data)
             strategy_intent = extract_strategy_from_output(agent_raw_output)
 
-            # --- Indentation Fixed Here ---
-            if not strategy_intent:
-                print("⚠️ Agent failed to provide strategy JSON. Defaulting to SAFE_THROTTLE.")
-                strategy_name = "SVC_SAFE_THROTTLE"
-            else:
-                strategy_name = strategy_intent.get("strategy", "SVC_SAFE_THROTTLE")
+            strategy_name = (
+                strategy_intent.get("strategy", "SVC_SAFE_THROTTLE")
+                if strategy_intent else "SVC_SAFE_THROTTLE"
+            )
 
-            # 2. Execute Deterministic Math Service
             dispatch_math = run_deterministic_math(strategy_name, telemetry_data)
 
-            # 3. Update Persistence (Local JSON/DB)
-            new_energy = dispatch_math['battery']['soc_after_mwh']
-            capacity = telemetry_data['current_state']['battery']['capacity_mwh']
-            
-            # Logic for persistence
-            update_state(new_energy, capacity)
-            print(f"✅ State Updated: {new_energy} MWh")
+            # update battery state
+            update_state(
+                dispatch_math["battery"]["soc_after_mwh"],
+                telemetry_data["current_state"]["battery"]["capacity_mwh"]
+            )
 
-            # 4. Final Response Assembly (Optional: store in history list)
+            normal_output = execute_safe_throttle(
+    SimpleNamespace(
+        solar=dispatch_math["solar"]["generated_mwh"],
+        load=dispatch_math["supply_mix"]["local_renewables_mwh"]
+             + dispatch_math["supply_mix"]["grid_import_mwh"],
+        battery_energy=dispatch_math["battery"]["soc_after_mwh"]
+    )
+)
+            normal_carbon_saved = normal_output['carbon']['saved_kgco2']
             final_response = {
                 "meta": {
-                    "timestamp": telemetry_data['metadata']['trigger_timestamp'],
-                    "region": telemetry_data['metadata']['region'],
+                    "timestamp": telemetry_data["metadata"]["trigger_timestamp"],
+                    "region": telemetry_data["metadata"]["region"],
                     "window_minutes": 30
                 },
-                "solar": dispatch_math['solar'],
-                "battery": dispatch_math['battery'],
-                "supply_mix": dispatch_math['supply_mix'],
-                "carbon": dispatch_math['carbon'],
+                "solar": dispatch_math["solar"],
+                "battery": dispatch_math["battery"],
+                "supply_mix": dispatch_math["supply_mix"],
+                "carbon": dispatch_math["carbon"],
+                "normal_carbon_saved": normal_carbon_saved,
                 "strategy_intent": strategy_intent,
-                "reasoning": {
-                    "why": agent_raw_output.split("Thought:")[-1].split("Action:")[0].strip() if "Thought:" in agent_raw_output else "Strategic optimization"
-                },
-                "summary": f"Executed {strategy_name}."
+                "summary": f"Executed {strategy_name}"
             }
-            # Note: A background loop 'return' doesn't go to the user. 
-            # You might want to append 'final_response' to a global history list here.
+
+            # load existing file
+            history = []
+            if LOCAL_JSON.exists():
+                with open(LOCAL_JSON, "r") as f:
+                    history = json.load(f)
+
+            history.append(final_response)
+            history = history[-100:]  # keep last 100
+
+            with open(LOCAL_JSON, "w") as f:
+                json.dump(history, f, indent=2)
+
+            print("✅ Dispatch updated")
 
         except Exception as e:
-            print(f"❌ Critical Failure: {str(e)}")
-            # Fallback logic if needed, but usually we just log and wait for next cycle
-        
-        # --- Critical: Sleep must be inside the while loop ---
-        print(f"😴 Cycle complete. Sleeping for 30 minutes...")
+            print("❌ Dispatch loop error:", e)
+
         time.sleep(30 * 60)
+
 
 @router.post("/")
 def dispatch():
     global _dispatch_thread, _dispatch_running
 
-    if _dispatch_running:
-        return {
-            "status": "in_process",
-            "interval_minutes": 30
-        }
+    if LOCAL_JSON.exists():
+        with open(LOCAL_JSON, "r") as f:
+            current_data = json.load(f)
+    else:
+        current_data = []
 
-    _dispatch_thread = threading.Thread(
-        target=dispatch_loop,
-        daemon=True
-    )
-    _dispatch_thread.start()
+    if not _dispatch_running:
+        _dispatch_thread = threading.Thread(
+            target=dispatch_loop,
+            daemon=True
+        )
+        _dispatch_thread.start()
 
+    # ✅ MATCH FRONTEND EXPECTATION
     return {
-        "status": "started",
-        "interval_minutes": 30
+        "status": "success",
+        "source": "local",
+        "data": current_data
     }
+
+
 
 @router.get("/history")
-def history(window: int = 30):
-    """
-    TEMP: call engine once and wrap as list
-    until persistence layer exists.
-    """
-
-    fake_payload = {
-        "solar_forecast": 11.2,
-        "battery_soc": 24,
-        "grid_intensity": 710,
-        "load": 18,
-    }
-
-    decision = run_mcp_agent_flow(fake_payload)
-
-    if isinstance(decision, str):
-        import json
-        try:
-            decision = json.loads(decision)
-        except:
-            decision = {"raw": decision}
-
-    return [decision]
+def history():
+    if LOCAL_JSON.exists():
+        with open(LOCAL_JSON, "r") as f:
+            return json.load(f)
+    return []

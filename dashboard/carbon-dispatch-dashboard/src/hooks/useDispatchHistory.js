@@ -1,65 +1,32 @@
 import { useEffect, useState } from "react";
-import fallbackData from "../mock/dispatch_data.json";
 
 const API = "http://127.0.0.1:8000";
+const REFRESH_INTERVAL_MS = 30_000; // 30 seconds
 
-export function useDispatchHistory(windowMin = 30) {
-  const [data, setData] = useState(fallbackData);
-  const [loading, setLoading] = useState(false);
+export function useDispatchHistory() {
+  const [data, setData] = useState([]);
   const [source, setSource] = useState("local");
 
   useEffect(() => {
-    let cancelled = false;
-
-    const load = async () => {
-      setLoading(true);
-
+    const fetchData = async () => {
       try {
-        const res = await fetch(`${API}/dispatch/`, {
+        const res = await fetch("http://127.0.0.1:8000/dispatch/", {
           method: "POST"
         });
-
-        if (!res.ok) throw new Error("Dispatch failed");
-
         const json = await res.json();
-
-        if (!cancelled && Array.isArray(json) && json.length) {
-          setData(prev => mergeByTimestamp(prev, json));
-          setSource("backend");
-        }
+        setData(json.data || []);
+        setSource(json.source || "local");
       } catch (err) {
-        console.warn("Using local dispatch snapshot");
-      } finally {
-        if (!cancelled) setLoading(false);
+        console.warn(err);
       }
     };
 
-    load();
+    fetchData(); // fetch once immediately
 
-    return () => {
-      cancelled = true;
-    };
-  }, [windowMin]);
+    const interval = setInterval(fetchData, 30_000); // poll every 30s
+    return () => clearInterval(interval);
+  }, []);
 
-  return { data, loading, source };
+  return { data, source };
 }
 
-
-function mergeByTimestamp(oldData, newData) {
-  const map = new Map();
-
-  oldData.forEach(d => {
-    map.set(d.timestamp, d);
-  });
-
-  newData.forEach(d => {
-    map.set(d.timestamp, {
-      ...map.get(d.timestamp),
-      ...d
-    });
-  });
-
-  return Array.from(map.values()).sort(
-    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-  );
-}

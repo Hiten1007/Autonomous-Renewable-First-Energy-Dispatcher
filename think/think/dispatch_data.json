@@ -1,0 +1,48 @@
+[
+  {
+    "meta": {
+      "timestamp": "2026-01-30T12:30:00+05:30",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+
+    "forecast": {
+      "solar_mwh": 50.0
+    },
+
+    "solar": {
+      "generated_mwh": 48.0,
+      "used_directly_mwh": 32.0,
+      "stored_mwh": 12.0,
+      "curtailed_mwh": 4.0
+    },
+
+    "battery": {
+      "state": "CHARGE",
+      "soc_before_mwh": 4.8,
+      "soc_after_mwh": 6.0,
+      "delta_mwh": 1.2
+    },
+
+    "supply_mix": {
+      "local_renewables_mwh": 32.0,
+      "grid_import_mwh": 1132.5,
+      "effective_re_percent": 21.4
+    },
+
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 682,
+      "baseline_kgco2": 793.1,
+      "actual_kgco2": 770.4,
+      "saved_kgco2": 22.7
+    },
+
+    "reasoning": {
+      "why": "High solar availability coincided with elevated grid carbon intensity. Battery charged while serving load directly to reduce grid dependence.",
+      "result": "2.9% lower emissions"
+    },
+
+    "summary": "Midday solar utilization and battery charging reduced grid reliance, lowering carbon emissions for the dispatch window.",
+    "normal_carbon_save":135
+  }
+]

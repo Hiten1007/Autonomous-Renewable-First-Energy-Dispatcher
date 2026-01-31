@@ -95,9 +95,6 @@ No extra keys are allowed.
 
 Explainability layer (short, factual)
 
-CRITICAL: If LLM fails to follow format 3 times, output ONLY:
-Thought: Final decision made
-Final Answer: {{"status": "safe_mode", "reason": "Format error fallback"}}
 
 NEVER output partial JSON or explanations without "Final Answer:" prefix.
 """

@@ -1,8 +1,9 @@
 import Panel from "../ui/Panel";
 
 export default function ForecastVsActual({ data, index }) {
-  const forecast = data.forecast.solar_mwh;
-  const actual = data.solar.generated_mwh;
+  // Use optional chaining and defaults
+  const forecast = data?.forecast?.solar_mwh ?? 50; // default 50 MWh
+  const actual = data?.solar?.generated_mwh ?? 48;  // default 48 MWh
 
   // fake mini profile inside the window
   const forecastSeries = [
@@ -24,7 +25,6 @@ export default function ForecastVsActual({ data, index }) {
   const max = Math.max(...forecastSeries, ...actualSeries) * 1.15;
 
   const scaleY = v => 140 - (v / max) * 110;
-
   const scaleX = i => 30 + i * 60;
 
   return (

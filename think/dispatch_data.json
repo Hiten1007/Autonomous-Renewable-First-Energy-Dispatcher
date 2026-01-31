@@ -1,0 +1,157 @@
+[
+  {
+    "meta": {
+      "timestamp": "2026-01-30T10:26:49.437006",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 2527.2799999999997,
+      "used_directly_mwh": 2263.38,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 2263.38,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "strategy_intent": {
+      "strategy": "SAFE_MODE",
+      "battery_intent": {
+        "mode": "CHARGE",
+        "priority": "SOLAR_ONLY",
+        "target_soc_percent": 80,
+        "max_c_rate": "NORMAL"
+      },
+      "reasoning": {
+        "why": "Carbon intensity exceeds 500 and SOC is below 30%"
+      }
+    },
+    "reasoning": {
+      "why": "Strategic optimization"
+    },
+    "summary": "Executed SAFE_MODE."
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-30T11:08:07.419686",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 2671.73,
+      "used_directly_mwh": 1235.52,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1235.52,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "strategy_intent": {
+      "strategy": "SAFE_MODE",
+      "battery_intent": {
+        "mode": "CHARGE",
+        "priority": "SOLAR_ONLY",
+        "target_soc_percent": 80,
+        "max_c_rate": "NORMAL"
+      },
+      "reasoning": {
+        "why": "Carbon intensity exceeds 500 and SOC is below 30%"
+      }
+    },
+    "summary": "Executed SAFE_MODE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-30T11:37:47.066882",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 2729.92,
+      "used_directly_mwh": 1032.06,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1032.06,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-30T12:09:14.405059",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 2962.09,
+      "used_directly_mwh": 1732.85,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1732.85,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  }
+]
