@@ -153,5 +153,566 @@
     "normal_carbon_saved": 0,
     "strategy_intent": null,
     "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T15:39:18.022140",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 1599.59,
+      "used_directly_mwh": 1312.06,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1312.06,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T15:39:18.021090",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 1495.94,
+      "used_directly_mwh": 1495.94,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1495.94,
+      "grid_import_mwh": 544.4099999999999,
+      "effective_re_percent": 73.317813120298
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T16:11:19.690975",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 1245.97,
+      "used_directly_mwh": 1245.97,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1245.97,
+      "grid_import_mwh": 914.2,
+      "effective_re_percent": 57.67925672516515
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T16:11:42.991410",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 1185.74,
+      "used_directly_mwh": 1185.74,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 1185.74,
+      "grid_import_mwh": 120.28999999999996,
+      "effective_re_percent": 90.78964495455695
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T16:43:47.169215",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 897.79,
+      "used_directly_mwh": 897.79,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 897.79,
+      "grid_import_mwh": 943.3500000000001,
+      "effective_re_percent": 48.762723095473454
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T16:43:51.185939",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 851.85,
+      "used_directly_mwh": 851.85,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 851.85,
+      "grid_import_mwh": 1647.75,
+      "effective_re_percent": 34.07945271243399
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T17:16:43.633594",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 528.49,
+      "used_directly_mwh": 528.49,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 528.49,
+      "grid_import_mwh": 1932.68,
+      "effective_re_percent": 21.473120507726
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T17:16:18.028808",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 486.19,
+      "used_directly_mwh": 456.59,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 456.59,
+      "grid_import_mwh": 0.0,
+      "effective_re_percent": 100.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T17:49:18.139544",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 138.06,
+      "used_directly_mwh": 138.06,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 138.06,
+      "grid_import_mwh": 1502.05,
+      "effective_re_percent": 8.4177280792142
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-01-31T17:49:43.217027",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 132.43,
+      "used_directly_mwh": 132.43,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 132.43,
+      "grid_import_mwh": 1298.8999999999999,
+      "effective_re_percent": 9.252233936269064
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T18:15:25.012309",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 1874.45,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T18:30:06.990582",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 3209.81,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T18:41:36.467145",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 3314.7,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T19:17:01.977524",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 1147.65,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T19:47:21.590579",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 1561.7,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T20:30:46.824517",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 1792.11,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
+  },
+  {
+    "meta": {
+      "timestamp": "2026-02-18T21:13:54.405831",
+      "region": "IN-NO",
+      "window_minutes": 30
+    },
+    "solar": {
+      "generated_mwh": 0.0,
+      "used_directly_mwh": 0.0,
+      "stored_mwh": 0,
+      "curtailed_mwh": 0
+    },
+    "battery": {
+      "state": "STANDBY",
+      "soc_before_mwh": 5200.0,
+      "soc_after_mwh": 5200.0,
+      "delta_mwh": 0
+    },
+    "supply_mix": {
+      "local_renewables_mwh": 0.0,
+      "grid_import_mwh": 1010.25,
+      "effective_re_percent": 0.0
+    },
+    "carbon": {
+      "grid_intensity_gco2_per_kwh": 0,
+      "saved_kgco2": 0,
+      "actual_kgco2": 0,
+      "baseline_kgco2": 0
+    },
+    "normal_carbon_saved": 0,
+    "strategy_intent": null,
+    "summary": "Executed SVC_SAFE_THROTTLE"
   }
 ]

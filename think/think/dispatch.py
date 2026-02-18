@@ -20,7 +20,6 @@ LOCAL_JSON = Path("dispatch_data.json")
 _dispatch_thread = None
 _dispatch_running = False
 
-
 def dispatch_loop():
     global _dispatch_running
     _dispatch_running = True
@@ -69,6 +68,8 @@ def dispatch_loop():
                 "strategy_intent": strategy_intent,
                 "summary": f"Executed {strategy_name}"
             }
+
+            # add battery update logic
 
             # load existing file
             history = []

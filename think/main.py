@@ -10,15 +10,12 @@ from think.services.svc_safe_throttle import execute_safe_throttle
 from think.services.strategy_select import  run_deterministic_math, extract_strategy_from_output
 from think.helpers.update_state import update_battery_state_local_json as update_state
 from think.dispatch import router as dispatch_router
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware # 1. Import the middleware
+# 2. Define the allowed origins
 
 app = FastAPI(title="Energy Decision Engine API")
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware # 1. Import the middleware
-
-app = FastAPI()
-
-# 2. Define the allowed origins
 origins = [
     "http://localhost:5173",  # Your React Frontend
     "http://127.0.0.1:5173",

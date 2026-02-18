@@ -1,17 +1,10 @@
 import json
 from pathlib import Path
 
-# 1. Get the path of the current file (update_state.py)
 current_file = Path(__file__).resolve()
 
-# 2. Go up the levels to reach the project root
-# update_state.py is in think/helpers/, so:
-# .parent = helpers/
-# .parent.parent = think/
-# .parent.parent.parent = Root (Autonomous Renewable First Energy Dispatcher)
 root_dir = current_file.parent.parent.parent
 
-# 3. Target the file in the root
 FILE_PATH = root_dir / "battery_state.json"
 
 def update_battery_state_local_json(new_energy, capacity):
