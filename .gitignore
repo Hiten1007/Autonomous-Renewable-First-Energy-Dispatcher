@@ -1,5 +1,44 @@
-__pycache__
-certs
+# ─── Secrets ───────────────────────────────────────────────────────────────────
+.env
+# (keep .env.example — it's a safe template for contributors)
+
+# ─── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.egg
+
+# ─── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ─── ML Models & Large Binaries ────────────────────────────────────────────────
+*.pkl
+*.faiss
+index_to_doc.pkl
+sense+think.zip
+
+# ─── Large Data Files ──────────────────────────────────────────────────────────
+*.csv
+FINAL_ALL_FEATURES_PROFILE.html
 HOURLY_SOLAR_DATA_PREPROCESS.csv
 HOURLY_SOLAR_DATA_PREPROCESS(2).csv
 HOURLY_SOLAR_DATA_IST2.csv
+
+# ─── TLS / Certificates ────────────────────────────────────────────────────────
+certs/
+
+# ─── Node / Dashboard ──────────────────────────────────────────────────────────
+node_modules/
+dist/
+.next/
+
+# ─── OS Artifacts ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

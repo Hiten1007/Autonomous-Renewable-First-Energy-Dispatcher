@@ -1,12 +1,15 @@
+import os
 import requests
 import numpy as np
 import pandas as pd
 import joblib
 from datetime import datetime, timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 
 # ---------------- CONFIG ----------------
-API_KEY = "H74KXGYYCRYWG9E7Y478K8CC3"
+load_dotenv()
+API_KEY = os.getenv("VISUAL_CROSSING_API_KEY")
 LOCATIONS = ["Panchkula,IN", "Rohtak,IN", "Gurugram,IN", "Hisar,IN", "Yamunanagar,IN"]
 AVG_LAT = 29.0
 AVG_LON = 76.0

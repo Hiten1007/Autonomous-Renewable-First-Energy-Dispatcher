@@ -56,3 +56,12 @@ class ToolInput(BaseModel):
         ..., 
         description="The semantic search query used to find safety protocols (e.g., 'battery SOC limits' or 'Haryana carbon thresholds')."
     )
+class UnifiedTelemetry(BaseModel):
+    """Complete data center telemetry for the multi-agent system."""
+    metadata: Dict[str, str]
+    current_state: CurrentState
+    it_metrics: ITMetrics
+    thermal_metrics: ThermalMetrics
+    cooling_metrics: CoolingMetrics
+    grid_metrics: Dict[str, float]
+    forecast_context: Dict

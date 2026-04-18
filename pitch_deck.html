@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-Energy Strategic Cortex — Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2235;
+  --accent-green: #10b981;
+  --accent-blue: #3b82f6;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: #1e293b;
+  --glow-green: rgba(16, 185, 129, 0.15);
+  --glow-blue: rgba(59, 130, 246, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* --- SLIDE CONTAINER --- */
+.deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 80px;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+  overflow-y: auto;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.slide.exit-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* --- NAVIGATION --- */
+.nav {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 100;
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(12px);
+  padding: 10px 24px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+}
+
+.nav-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-dot.active {
+  background: var(--accent-green);
+  box-shadow: 0 0 12px var(--accent-green);
+  transform: scale(1.3);
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+.slide-counter {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* --- TYPOGRAPHY --- */
+.slide-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.slide-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  font-weight: 400;
+  max-width: 700px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-green);
+  margin-bottom: 16px;
+}
+
+/* --- CARDS --- */
+.card-grid {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s;
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-green);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 12px;
+}
+
+.tag-green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+.tag-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+.tag-amber { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+.tag-red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+
+/* --- STAT BLOCKS --- */
+.stat-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.stat-block {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- TABLE --- */
+.pitch-table {
+  width: 100%;
+  max-width: 900px;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.pitch-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pitch-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.pitch-table tr:hover td {
+  background: var(--bg-card);
+}
+
+.highlight-val {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+/* --- FLOW DIAGRAM --- */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flow-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 140px;
+}
+
+.flow-step .step-num {
+  font-size: 11px;
+  color: var(--accent-green);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.flow-step .step-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.flow-step .step-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.flow-arrow {
+  color: var(--accent-green);
+  font-size: 20px;
+}
+
+/* --- HERO SPECIFIC --- */
+.hero-title {
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  text-align: center;
+  max-width: 800px;
+}
+
+.hero-title .green {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-badge {
+  margin-top: 32px;
+  padding: 8px 20px;
+  border: 1px solid var(--accent-green);
+  border-radius: 30px;
+  font-size: 12px;
+  color: var(--accent-green);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* --- COMPARISON --- */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 0;
+  width: 100%;
+  max-width: 900px;
+  align-items: center;
+}
+
+.compare-col {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid var(--border);
+}
+
+.compare-col.good {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 30px var(--glow-green);
+}
+
+.compare-vs {
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.compare-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.compare-item:last-child { border: none; }
+
+.compare-label { color: var(--text-secondary); }
+.compare-value { font-weight: 600; }
+.compare-value.bad { color: var(--accent-red); }
+.compare-value.good { color: var(--accent-green); }
+
+/* --- CTA --- */
+.cta-card {
+  background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(59,130,246,0.1));
+  border: 1px solid var(--accent-green);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  max-width: 700px;
+}
+
+.cta-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.cta-items {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.cta-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 28px;
+  text-align: center;
+  min-width: 180px;
+}
+
+.cta-item-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cta-item-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Glow effects */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: -1;
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" id="slide-0">
+    <div class="glow-orb" style="width:400px;height:400px;background:var(--glow-green);top:10%;left:60%"></div>
+    <div class="glow-orb" style="width:300px;height:300px;background:var(--glow-blue);bottom:20%;left:20%"></div>
+    <div class="label">H-Energy Strategic Cortex</div>
+    <h1 class="hero-title">AI That Makes Your <span class="green">Battery Investment</span> Pay Back Faster</h1>
+    <p class="hero-sub">Autonomous energy dispatch for data centers. Every 30 minutes, the right strategy. Zero human intervention.</p>
+    <div class="hero-badge">Built for Indian Grid · Haryana / NCR</div>
+  </div>
+
+  <!-- SLIDE 2: THE PROBLEM -->
+  <div class="slide" id="slide-1">
+    <div class="label">The Problem</div>
+    <h2 class="slide-title">₹50-80 Cr Battery Investment,<br>Managed by a Timer</h2>
+    <p class="slide-subtitle">Data centers install solar + BESS but run them on static schedules. They can't adapt to fog, demand spikes, or carbon fluctuations.</p>
+    <div class="card-grid cols-3">
+      <div class="card">
+        <div class="card-icon">🌫️</div>
+        <div class="card-title">Fog Blindness</div>
+        <div class="card-desc">Timer charges battery expecting 2500 MWh solar. Fog day delivers 200 MWh. Battery sits empty at evening peak.</div>
+        <span class="card-tag tag-red">Winter Loss</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">⏰</div>
+        <div class="card-title">Wrong Timing</div>
+        <div class="card-desc">Timer discharges at fixed 7 PM. Actual demand peak was at 8:15 PM. Battery ran out before the real spike hit.</div>
+        <span class="card-tag tag-amber">Daily Loss</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏭</div>
+        <div class="card-title">Carbon Ignorance</div>
+        <div class="card-desc">Timer charges from grid at 6 PM (coal-heavy, 750 gCO₂/kWh) when 3 AM grid is clean (350 gCO₂/kWh, nuclear/hydro).</div>
+        <span class="card-tag tag-red">ESG Risk</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: HOW IT WORKS -->
+  <div class="slide" id="slide-2">
+    <div class="label">How It Works</div>
+    <h2 class="slide-title">Every 30 Minutes. Fully Autonomous.</h2>
+    <p class="slide-subtitle">The system reads, forecasts, decides, and executes — no operator needed.</p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">STEP 1</div>
+        <div class="step-name">📡 Sense</div>
+        <div class="step-detail">Live solar, load, battery, carbon intensity</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-num">STEP 2</div>
+        <div class="step-name">🔮 Forecast</div>
+        <div class="step-detail">6-hour ML prediction (LGBM model)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-num">STEP 3</div>
+        <div class="step-name">🧠 Decide</div>
+        <div class="step-detail">LLM agent + safety KB selects strategy</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-num">STEP 4</div>
+        <div class="step-name">⚡ Execute</div>
+        <div class="step-detail">Physics-safe battery dispatch</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-value">30</div>
+        <div class="stat-label">Min Control Cycle</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">6hr</div>
+        <div class="stat-label">Forecast Horizon</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Strategies</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Human Operators</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: THE 4 STRATEGIES -->
+  <div class="slide" id="slide-3">
+    <div class="label">The Four Strategies</div>
+    <h2 class="slide-title">Right Strategy, Right Moment</h2>
+    <p class="slide-subtitle" style="margin-bottom:24px">The AI selects one strategy every 30 minutes based on real-time conditions.</p>
+    <div class="card-grid cols-2">
+      <div class="card">
+        <div class="card-icon">☀️</div>
+        <div class="card-title">SVC_MAX_RENEWABLE</div>
+        <div class="card-desc">Solar surplus detected → Store every watt. Zero curtailment. Battery charges from solar only.</div>
+        <span class="card-tag tag-green">Charge · Solar Only</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📈</div>
+        <div class="card-title">SVC_PEAK_SHAVING</div>
+        <div class="card-desc">Demand spike incoming → Discharge battery to cover peak. Avoids ₹9/kWh ToD charges.</div>
+        <span class="card-tag tag-amber">Discharge · Peak Hours</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌙</div>
+        <div class="card-title">SVC_LOW_CARBON_GRID</div>
+        <div class="card-desc">Night + clean grid → Pre-charge battery from nuclear/hydro. Ready for morning without coal emissions.</div>
+        <span class="card-tag tag-blue">Charge · Grid Allowed</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">SVC_SAFE_THROTTLE</div>
+        <div class="card-desc">Unsafe conditions → Battery idle. Protects against low SOC, sensor errors, fog mismatch.</div>
+        <span class="card-tag tag-red">Idle · Protection</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: MARKET -->
+  <div class="slide" id="slide-4">
+    <div class="glow-orb" style="width:350px;height:350px;background:var(--glow-blue);top:15%;right:10%"></div>
+    <div class="label">Market Opportunity</div>
+    <h2 class="slide-title">India's Data Center Boom</h2>
+    <p class="slide-subtitle">Every new MW needs intelligent energy management. We're building the brain.</p>
+    <div class="stat-row" style="margin-bottom:30px">
+      <div class="stat-block">
+        <div class="stat-value">10GW</div>
+        <div class="stat-label">India DC Capacity 2025</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">18GW</div>
+        <div class="stat-label">Projected 2028</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-value">35%</div>
+        <div class="stat-label">NCR/Haryana Share</div>
+      </div>
+    </div>
+    <table class="pitch-table">
+      <tr><th>Driver</th><th>Impact</th></tr>
+      <tr><td>Green Data Center Policy (MeitY)</td><td class="highlight-val">Mandatory RE compliance by 2030</td></tr>
+      <tr><td>Haryana HT Tariff (FY26)</td><td>₹6.95/kWh + ₹290/kVA fixed charges</td></tr>
+      <tr><td>Solar Open Access LCOE</td><td>₹3-4/kWh (50% cheaper than grid)</td></tr>
+      <tr><td>BESS CapEx Decline</td><td>$125-200K/MWh, falling 15% YoY</td></tr>
+      <tr><td>Carbon Credit Market (CBEEX)</td><td class="highlight-val">New revenue stream for compliant DCs</td></tr>
+    </table>
+  </div>
+
+  <!-- SLIDE 6: FINANCIAL IMPACT (HONEST) -->
+  <div class="slide" id="slide-5">
+    <div class="label">Financial Impact — Honest Numbers</div>
+    <h2 class="slide-title">What Our Software Actually Saves</h2>
+    <p class="slide-subtitle" style="margin-bottom:20px">We don't replace solar + battery. We make the investment work 15-20% harder.</p>
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px;color:var(--text-muted)">Timer-Based Dispatch</div>
+        <div class="compare-item"><span class="compare-label">Solar Utilization</span><span class="compare-value bad">~60%</span></div>
+        <div class="compare-item"><span class="compare-label">Peak Timing Accuracy</span><span class="compare-value bad">Fixed 7 PM</span></div>
+        <div class="compare-item"><span class="compare-label">Fog/Monsoon Adaptation</span><span class="compare-value bad">None</span></div>
+        <div class="compare-item"><span class="compare-label">Carbon Tracking</span><span class="compare-value bad">Manual</span></div>
+        <div class="compare-item"><span class="compare-label">BESS Payback</span><span class="compare-value bad">6-8 years</span></div>
+        <div class="compare-item"><span class="compare-label">Annual Savings</span><span class="compare-value">₹6-8 Cr</span></div>
+      </div>
+      <div class="compare-vs">VS</div>
+      <div class="compare-col good">
+        <div style="font-size:14px;font-weight:700;margin-bottom:16px;color:var(--accent-green)">AI Dispatch (Ours)</div>
+        <div class="compare-item"><span class="compare-label">Solar Utilization</span><span class="compare-value good">~95%</span></div>
+        <div class="compare-item"><span class="compare-label">Peak Timing Accuracy</span><span class="compare-value good">±15 min adaptive</span></div>
+        <div class="compare-item"><span class="compare-label">Fog/Monsoon Adaptation</span><span class="compare-value good">Real-time switch</span></div>
+        <div class="compare-item"><span class="compare-label">Carbon Tracking</span><span class="compare-value good">Audit-ready</span></div>
+        <div class="compare-item"><span class="compare-label">BESS Payback</span><span class="compare-value good">5-7 years</span></div>
+        <div class="compare-item"><span class="compare-label">Annual Savings</span><span class="compare-value good">₹7-10 Cr</span></div>
+      </div>
+    </div>
+    <div style="margin-top:20px;text-align:center">
+      <div style="font-size:14px;color:var(--text-muted)">Our Incremental Value</div>
+      <div style="font-size:36px;font-weight:900;color:var(--accent-green)">₹1.2 — 1.7 Cr/year</div>
+      <div style="font-size:12px;color:var(--text-muted)">per 10 MW data center</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: SAVINGS BREAKDOWN -->
+  <div class="slide" id="slide-6">
+    <div class="label">Where The Savings Come From</div>
+    <h2 class="slide-title">Monthly Breakdown (10 MW)</h2>
+    <p class="slide-subtitle" style="margin-bottom:16px">Each line item represents value a static timer cannot capture.</p>
+    <table class="pitch-table">
+      <tr><th>Source</th><th>Timer Fails Because</th><th>AI Fixes It</th><th style="text-align:right">₹/Month</th></tr>
+      <tr>
+        <td><strong>Peak Shaving Precision</strong></td>
+        <td>Fixed 7 PM discharge. Peak shifts daily.</td>
+        <td>Forecast-guided ±15 min timing</td>
+        <td style="text-align:right" class="highlight-val">₹2.5-4L</td>
+      </tr>
+      <tr>
+        <td><strong>Carbon-Aware Charging</strong></td>
+        <td>Charges at 6 PM (coal, ₹9/kWh)</td>
+        <td>Charges at 3 AM (nuclear, ₹6.95/kWh)</td>
+        <td style="text-align:right" class="highlight-val">₹3-4L</td>
+      </tr>
+      <tr>
+        <td><strong>Fog/Monsoon Response</strong></td>
+        <td>Expects solar that never comes</td>
+        <td>Detects actual &lt;&lt; forecast, pivots</td>
+        <td style="text-align:right" class="highlight-val">₹2.5-3.5L</td>
+      </tr>
+      <tr>
+        <td><strong>Curtailment Avoidance</strong></td>
+        <td>Battery full when surprise surplus hits</td>
+        <td>Keeps 10-15% headroom always</td>
+        <td style="text-align:right" class="highlight-val">₹1-1.5L</td>
+      </tr>
+      <tr>
+        <td><strong>Weekend Adaptation</strong></td>
+        <td>Same schedule on low-demand Sundays</td>
+        <td>Absorbs grid surplus, stays in CHARGE</td>
+        <td style="text-align:right" class="highlight-val">₹0.5-1L</td>
+      </tr>
+      <tr style="border-top:2px solid var(--accent-green)">
+        <td colspan="3" style="font-weight:700;color:var(--text-primary)">Total Monthly</td>
+        <td style="text-align:right;font-weight:700;color:var(--accent-green);font-size:16px">₹10-14L</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SLIDE 8: TECH STACK -->
+  <div class="slide" id="slide-7">
+    <div class="label">Technology</div>
+    <h2 class="slide-title">AI Decides. Physics Executes.</h2>
+    <p class="slide-subtitle">The LLM selects the strategy. Deterministic math ensures battery safety.</p>
+    <div class="card-grid cols-3">
+      <div class="card">
+        <div class="card-icon">🔮</div>
+        <div class="card-title">ML Forecasting</div>
+        <div class="card-desc">LightGBM multi-output models forecast 6-hour solar + load. Trained on Haryana-specific data with lag and rolling features.</div>
+        <span class="card-tag tag-blue">LGBM · Python</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <div class="card-title">LLM Agent</div>
+        <div class="card-desc">ReAct agent with vector knowledge base. Retrieves safety protocols before every decision. Cites data in reasoning.</div>
+        <span class="card-tag tag-purple" style="background:rgba(139,92,246,0.15);color:var(--accent-purple)">LangChain · Ollama</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Deterministic Engine</div>
+        <div class="card-desc">Physics-safe execution. Hard SOC limits (15% floor, 98% ceiling), C-rate clamping. No hallucination in the math layer.</div>
+        <span class="card-tag tag-green">FastAPI · Python</span>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center;color:var(--text-muted);font-size:13px">
+      <strong style="color:var(--accent-green)">Key safety principle:</strong> The AI chooses WHAT to do. Deterministic code decides HOW MUCH. The AI can never exceed battery limits.
+    </div>
+  </div>
+
+  <!-- SLIDE 9: THE ASK -->
+  <div class="slide" id="slide-8">
+    <div class="glow-orb" style="width:400px;height:400px;background:var(--glow-green);top:20%;left:50%;transform:translateX(-50%)"></div>
+    <div class="label">The Ask</div>
+    <h2 class="slide-title" style="margin-bottom:24px">Let's Prove It Together</h2>
+    <div class="cta-card">
+      <div class="cta-title">90-Day Pilot on Your Facility</div>
+      <p style="font-size:14px;color:var(--text-secondary);max-width:500px;margin:0 auto;line-height:1.6">
+        Deploy on one 5-10 MW site. Measure savings vs your current timer schedule. Zero risk — we run in shadow mode alongside your existing system.
+      </p>
+      <div class="cta-items">
+        <div class="cta-item">
+          <div class="cta-item-title">🏗️ Pilot Partner</div>
+          <div class="cta-item-desc">1 data center in NCR<br>5-10 MW facility</div>
+        </div>
+        <div class="cta-item">
+          <div class="cta-item-title">🔋 BESS Co-sell</div>
+          <div class="cta-item-desc">Hardware vendor to bundle<br>our software layer</div>
+        </div>
+        <div class="cta-item">
+          <div class="cta-item-title">💰 Seed Funding</div>
+          <div class="cta-item-desc">₹1-2 Cr to scale<br>pilot → multi-site</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:30px;text-align:center">
+      <div style="font-size:14px;color:var(--text-secondary)">[Your Name] · [Email] · [Phone]</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button class="nav-btn" onclick="prev()">← Prev</button>
+  <div id="dots"></div>
+  <span class="slide-counter" id="counter">1 / 9</span>
+  <button class="nav-btn" onclick="next()">Next →</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+
+// Create dots
+const dotsContainer = document.getElementById('dots');
+for (let i = 0; i < total; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  dotsContainer.appendChild(dot);
+}
+
+function goTo(n) {
+  if (n < 0 || n >= total || n === current) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit-left');
+  setTimeout(() => slides[current === n ? current : current].classList.remove('exit-left'), 500);
+
+  const prev = current;
+  current = n;
+  slides[current].classList.add('active');
+
+  // after transition cleanup
+  setTimeout(() => { slides[prev].classList.remove('exit-left'); }, 500);
+
+  // Update dots
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+
+  // Update counter
+  document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+});
+</script>
+
+</body>
+</html>

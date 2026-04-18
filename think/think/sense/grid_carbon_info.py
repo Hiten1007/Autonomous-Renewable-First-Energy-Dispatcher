@@ -5,7 +5,7 @@ import os
 # ---------------- CONFIG ----------------
 load_dotenv()
 
-API_KEY = os.getenv("ELECTRICITY_MAPS_API_KEY") or "cqfoNJvOGZcfiBcNPZs8"
+API_KEY = os.getenv("ELECTRICITY_MAPS_API_KEY")
 BASE_URL = "https://api.electricitymaps.com/v3"
 
 HEADERS = {
